@@ -49,6 +49,10 @@ function create(mouse)
 
 	end
 
+	function checkbox.delete(id)
+		checkboxes[id] = nil
+	end
+
 	return checkbox
 
 end

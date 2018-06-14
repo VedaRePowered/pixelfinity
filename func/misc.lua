@@ -15,4 +15,15 @@ function misc.sep(str, char)
         return list[1], list, table.unpack(list)
 end
 
+function misc.randLine(file)
+	local fileList = {}
+	local f = io.open("assets/" .. file, "r")
+	local line = ""
+	while line do
+		line = f:read("*line")
+		fileList[#fileList+1] = line
+	end
+	return fileList[math.random(1, #fileList)]
+end
+
 return misc

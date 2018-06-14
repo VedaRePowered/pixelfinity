@@ -66,6 +66,10 @@ function create(mouse)
 
 	end
 
+	function slider.delete(id)
+		sliders[id] = nil
+	end
+
 	return slider
 end
 

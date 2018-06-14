@@ -49,6 +49,10 @@ function create(mouse)
 
 	end
 
+	function radio.delete(id)
+		buttonSets[id] = nil
+	end
+
 	return radio
 end
 

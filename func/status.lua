@@ -1,5 +1,5 @@
 local status = {}
-status.current = "menu"
+status.current = "load"
 
 function status.check(currentStatus)
 	if status.current == currentStatus then

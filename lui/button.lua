@@ -6,7 +6,7 @@ function create(mouse)
 	function button.newButtonTexture(imageFile, font)
 
 		local texture = {}
-		texture.image = love.graphics.newImage(imageFile)
+		texture.image = love.graphics.newImage("lui/assets/" .. imageFile .. ".bmp")
 		texture.image:setFilter("nearest")
 
 		texture.xRes, texture.yRes = texture.image:getDimensions()
@@ -107,6 +107,10 @@ function create(mouse)
 
 		return buttons[id]["pressed"]
 
+	end
+
+	function button.delete(id)
+		buttons[id] = nil
 	end
 
 	return button

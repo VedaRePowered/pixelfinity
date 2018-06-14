@@ -49,6 +49,10 @@ function create()
 
 	end
 
+	function progress.delete(id)
+		progressBars[id] = nil
+	end
+
 	return progress
 
 end

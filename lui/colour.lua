@@ -73,6 +73,10 @@ function create(mouse)
 
 	end
 
+	function colour.delete(id)
+		colourPickers[id] = nil
+	end
+
 	return colour
 
 end
