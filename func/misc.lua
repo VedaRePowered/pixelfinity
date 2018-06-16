@@ -26,4 +26,19 @@ function misc.randLine(file)
 	return fileList[math.random(1, #fileList)]
 end
 
+function misc.error(text)
+	io.write("ERR|" .. text .. "\n")
+	io.write("--------------------")
+	error(text)
+end
+function misc.warn(text)
+	io.write("WRN|" .. text .. "\n")
+end
+function misc.debug(text)
+	io.write("DBG|" .. text .. "\n")
+end
+function misc.info(text)
+	io.write("INF|" .. text .. "\n")
+end
+
 return misc

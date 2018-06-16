@@ -1,27 +1,26 @@
 local load = {}
 local progress1, progress2 = "loadAssets", 1
-local bar1, bar2
 
 function load.init()
-	logo = love.graphics.newImage("assets/logo.png")
+	asset.load("logo", "logo")
 	local width, height = love.window.getMode()
-	bar1 = ui.progress.newBar(width/4, 300, width/2, 50, {0.95, 0.07, 0.17})
-	bar2 = ui.progress.newBar(width/4, 400, width/2, 50, {0.19, 0.31, 1})
-	ui.button.newButtonTexture("minicraftButton", font)
+	id.new( "bar-load-1", ui.progress.newBar(width/4, 300, width/2, 50, {0.95, 0.07, 0.17}) )
+	id.new( "bar-load-2", ui.progress.newBar(width/4, 400, width/2, 50, {0.19, 0.31, 1}) )
+	id.new( "tex-main", ui.button.newButtonTexture("minicraftButton", asset.newFont("big", "menlo.ttf", 32)) )
 end
 
 function load.update()
 	if progress1 == "initalyze" then
-		ui.progress.setProgress(bar1, 0)
+		ui.progress.setProgress(id.get("bar-load-1"), 0)
 	elseif progress1 == "loadAssets" then
 		load.assets()
-		ui.progress.setProgress(bar1, 0.25)
+		ui.progress.setProgress(id.get("bar-load-1"), 0.25)
 	elseif progress1 == "declareBlocks" then
 		load.blocks()
-		ui.progress.setProgress(bar1, 0.5)
+		ui.progress.setProgress(id.get("bar-load-1"), 0.5)
 	elseif progress1 == "declareItems" then
 		progress1 = "done"
-		ui.progress.setProgress(bar1, 0.75)
+		ui.progress.setProgress(id.get("bar-load-1"), 0.75)
 	elseif progress1 == "done" then
 		load.complete()
 	end
@@ -35,8 +34,9 @@ function load.assets()
 		progress2 = progress2 + 1
 	else
 		progress1 = "declareBlocks"
+		progress2 = 1
 	end
-	ui.progress.setProgress(bar2, (progress2-1)/#block.getDeclaringBlocks())
+	ui.progress.setProgress(id.get("bar-load-2"), (progress2-1)/#block.getDeclaringBlocks())
 end
 
 function load.blocks()
@@ -47,14 +47,16 @@ function load.blocks()
 	else
 		progress1 = "declareItems"
 	end
-	ui.progress.setProgress(bar2, (progress2-1)/#block.getDeclaringBlocks())
+	ui.progress.setProgress(id.get("bar-load-2"), (progress2-1)/#block.getDeclaringBlocks())
 end
 
 function load.complete()
-	ui.progress.delete(bar1)
-	ui.progress.delete(bar2)
+	ui.progress.delete(id.get("bar-load-1"))
+	ui.progress.delete(id.get("bar-load-2"))
 	status.change("menu")
-	ui.button.newButton()
+	local width, height = love.window.getMode()
+	id.new( "btn-play", ui.button.newButton(width/4, 300, "Play", id.get("tex-main"), {0.95, 0.2, 0.6}, width/2) )
+	id.new( "btn-quit", ui.button.newButton(width/4, 400, "Quit", id.get("tex-main"), {0.95, 0.2, 0.6}, width/2) )
 end
 
 return load

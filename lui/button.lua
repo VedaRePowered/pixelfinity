@@ -32,12 +32,19 @@ function create(mouse)
 
 	end
 
-	function button.newButton(btnX, btnY, text, texture, colour)
+	function button.newButton(btnX, btnY, text, texture, colour, width, height)
 
 		local id = #buttons + 1
 		local btn = {x=btnX, y=btnY, width=math.ceil(texture.font:getWidth(text)/8+1)*8, height=math.ceil(texture.font:getHeight(text)/8+1)*8, pressed=false}
 
-		local height, width = math.ceil(texture.font:getHeight(text)/8)+1, math.ceil(texture.font:getWidth(text)/8)
+		if width then
+			btn.width = width
+		end
+		if height then
+			btn.height = height
+		end
+
+		height, width = btn.width/8, btn.width/8-2
 
 		local canvas = love.graphics.newCanvas(btn.width, btn.height)
 		love.graphics.setCanvas(canvas)
