@@ -15,7 +15,8 @@ function block.getDeclaringBlocks()
 		{ "stone", "rock", 5, {{item="cobblestoneblock", chance=1, ammount=1, withtool=true}} },
 		{ "cobblestone", "rock", 4, {{item="cobblestoneblock", chance=1, ammount=1, withtool=true}} },
 		{ "dirt", "dirt", 2, {{item="dirtblock", chance=1, ammount=1}} },
-		{ "grass", "grass", 3, {{item="dirtblock", chance=1, ammount=1}, {item="grass", chance=1, ammount=1, withtool=true}} }
+		{ "grass", "dirt", 3, {{item="dirtblock", chance=1, ammount=1}, {item="grass", chance=1, ammount=1, withtool=true}} },
+		{ "clay", "dirt", 2, {{item="clay", chance=1, ammount=2}, {item="clay", chance=0.5, ammount=2}} }
 	}
 end
 

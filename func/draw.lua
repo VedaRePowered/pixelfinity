@@ -29,7 +29,7 @@ end
 
 function draw.world()
 	local camX, camY = camera.getPos()
-	for yOffset = 0, zoom.yBlocks() do
+	for yOffset = 0, zoom.yBlocks()+1 do
 		for xOffset = 0, zoom.xBlocks() do
 			block.drawBlock(worldFunc.get(math.floor(xOffset+camX), math.floor(yOffset+camY)), xOffset*zoom.blockSize(), yOffset*zoom.blockSize())
 		end
