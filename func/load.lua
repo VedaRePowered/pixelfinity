@@ -1,5 +1,5 @@
 local load = {}
-local progress1, progress2 = "loadAssets", 1
+local progress1, progress2 = "initalyze", 1
 
 function load.init()
 	asset.load("logo", "logo")
@@ -11,7 +11,9 @@ end
 
 function load.update()
 	if progress1 == "initalyze" then
+		player.new("BEN1JEN", 0, 212, {})
 		ui.progress.setProgress(id.get("bar-load-1"), 0)
+		progress1 = "loadAssets"
 	elseif progress1 == "loadAssets" then
 		load.assets()
 		ui.progress.setProgress(id.get("bar-load-1"), 0.25)
@@ -42,7 +44,7 @@ end
 function load.blocks()
 	local a = block.getDeclaringBlocks()[progress2]
 	if a then
-		block.declareBlock(a[1], asset.get(a[1]), a[2], a[3], a[4])
+		block.declareBlock(a[1], asset.get(a[1]), a[2], a[3], a[4], a[5])
 		progress2 = progress2 + 1
 	else
 		progress1 = "declareItems"

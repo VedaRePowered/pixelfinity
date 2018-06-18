@@ -16,6 +16,9 @@ function love.load()
 	draw      = require "func.draw"
 	update    = require "func.update"
 	worldFunc = require "func.world"
+	collision = require "func.collision"
+	button    = require "func.button"
+	player    = require "func.player"
 	lui       = require "lui.index"
 
 	ui = lui()
@@ -24,7 +27,7 @@ function love.load()
 end
 
 function love.update(delta)
-	update.update()
+	update.update(delta)
 end
 
 function love.draw()

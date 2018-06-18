@@ -1,8 +1,13 @@
 zoom = {}
-zoomLevel = 4
+zoomLevel = 8
+
+if zoomLevel == 0 then
+	misc.error("zoom: zoomLevel cannot be 0")
+end
 
 function zoom.offset()
-	return 0, 0
+	local width, height = love.window.getMode()
+	return width/2/zoomLevel/16, height/2/zoomLevel/16
 end
 
 function zoom.xBlocks()

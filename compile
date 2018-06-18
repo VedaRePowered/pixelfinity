@@ -6,9 +6,11 @@ mkdir compiled/func
 cp func/*.lua compiled/func
 mkdir compiled/assets
 cp -r assets/* compiled/assets
+cp -r lui/ compiled
 
 rm pixelfinity.love
 cd compiled
 zip -r ../pixelfinity.love *
 
+cd ..
 rm -rf compiled

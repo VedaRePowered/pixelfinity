@@ -1,17 +1,20 @@
 local update = {}
 
-function update.update()
+function update.update(delta)
 	if status.check("menu") then
 		update.menu()
 	elseif status.check("load") then
 		update.load()
 	elseif status.check("game") then
-		update.game()
+		update.game(delta)
 	end
 end
 
-function update.game()
-
+function update.game(delta)
+	player.move("BEN1JEN", delta)
+	local playerX, playerY = player.getPosition("BEN1JEN")
+	local offsetX, offsetY = zoom.offset()
+	camera.jump(playerX - offsetX, playerY - offsetY)
 end
 
 function update.menu()

@@ -7,6 +7,7 @@ function draw.draw()
 		draw.menu()
 	elseif status.check("game") then
 		draw.world()
+		draw.player()
 	end
 	ui.draw()
 end
@@ -29,11 +30,19 @@ end
 
 function draw.world()
 	local camX, camY = camera.getPos()
-	for yOffset = 0, zoom.yBlocks()+1 do
-		for xOffset = 0, zoom.xBlocks() do
-			block.drawBlock(worldFunc.get(math.floor(xOffset+camX), math.floor(yOffset+camY)), xOffset*zoom.blockSize(), yOffset*zoom.blockSize())
+	for yOffset = 1, zoom.yBlocks()+2 do
+		for xOffset = -1, zoom.xBlocks()+1 do
+			block.drawBlock(worldFunc.get(math.floor(xOffset+camX), math.floor(yOffset+camY)), (xOffset - misc.fpart(camX))*zoom.blockSize(), (yOffset - misc.fpart(camY))*zoom.blockSize())
 		end
 	end
+end
+
+function draw.player()
+	local playerX, playerY = player.getPosition("BEN1JEN")
+	local camX, camY = camera.getPos()
+	local _, height = love.window.getMode()
+	playerX, playerY = playerX - camX, playerY - camY
+	love.graphics.rectangle("fill", playerX*zoom.blockSize(), height-playerY*zoom.blockSize(), zoom.blockSize() * 0.75, zoom.blockSize())
 end
 
 return draw

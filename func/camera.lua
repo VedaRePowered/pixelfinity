@@ -1,7 +1,7 @@
 local camera = {}
 local camX, camY = 0, 250
 
-function camera.goto(x, y)
+function camera.jump(x, y)
 	camX, camY = x, y
 end
 

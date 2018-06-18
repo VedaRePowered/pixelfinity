@@ -28,7 +28,7 @@ end
 
 function misc.error(text)
 	io.write("ERR|" .. text .. "\n")
-	io.write("--------------------")
+	io.write("-------------------------------------------\n")
 	error(text)
 end
 function misc.warn(text)
@@ -39,6 +39,25 @@ function misc.debug(text)
 end
 function misc.info(text)
 	io.write("INF|" .. text .. "\n")
+end
+
+function misc.fpart(n)
+	return n - math.floor(n)
+end
+
+function misc.clamp(n, m, x)
+	n = math.max(n, m)
+	n = math.min(n, x)
+	return n
+end
+
+function misc.slowDown(n, s)
+	if n > 0 then
+		n = math.max(0, n - s)
+	elseif n < 0 then
+		n = math.min(0, n + s)
+	end
+	return n
 end
 
 return misc
