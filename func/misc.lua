@@ -60,4 +60,8 @@ function misc.slowDown(n, s)
 	return n
 end
 
+function misc.arrayCopy(input, output)
+	output = {table.unpack(input)}
+end
+
 return misc

@@ -15,6 +15,7 @@ function update.game(delta)
 	local playerX, playerY = player.getPosition("BEN1JEN")
 	local offsetX, offsetY = zoom.offset()
 	camera.jump(playerX - offsetX, playerY - offsetY)
+	inventory.update(player.getInventory("BEN1JEN"))
 end
 
 function update.menu()

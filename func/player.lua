@@ -1,8 +1,11 @@
 local player = {}
 local players = {}
 
-function player.new(name, x, y, inventory)
-	players[name] = {x=x, y=y, inventory=inventory, vx=0, vy=0, onGround=false}
+function player.new(name, x, y, inv)
+	if not inv then
+		inv = inventory.fill(10, 5)
+	end
+	players[name] = {x=x, y=y, inv=inv, vx=0, vy=0, onGround=false}
 end
 
 function player.move(name, delta)
@@ -30,6 +33,10 @@ function player.move(name, delta)
 	else
 		misc.warn("player: not a valid player: " .. name)
 	end
+end
+
+function player.getInventory(name)
+	return players[name]["inv"]
 end
 
 function player.getPosition(name)

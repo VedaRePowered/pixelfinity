@@ -1,4 +1,4 @@
-collision = {}
+local collision = {}
 
 function collision.limit(w, h, x, y, xv, yv)
 
@@ -22,6 +22,22 @@ function collision.limit(w, h, x, y, xv, yv)
 	end
 
 	return x, y, onGround
+
+end
+
+function collision.limitNew(w, h, x, y, xv, yv)
+
+	local angle = math.atan2(y-yv, x-xv)
+	local oneX, oneY = math.sin(angle), math.cos(angle)
+
+	local done = false
+	local curX, curY = x, y
+	while not done do
+		curX, curY = curX + oneX, curY + oneY
+		if not (worldFunc.getBlock(curX, curY).intangable and worldFunc.getBlock(curX+w, curY).intangable and worldFunc.getBlock(curX, curY+h).intangable and worldFunc.getBlock(curX+w, curY+h).intangable) then
+			done = true
+		end
+	end
 
 end
 

@@ -8,6 +8,8 @@ function draw.draw()
 	elseif status.check("game") then
 		draw.world()
 		draw.player()
+		inventory.draw(player.getInventory("BEN1JEN"))
+		inventory.drawItemGrabed()
 	end
 	ui.draw()
 end
@@ -25,6 +27,7 @@ function draw.menu()
 	if not motd then
 		motd = misc.randLine("motd.txt")
 	end
+	love.graphics.setFont(asset.getFont("regular"))
 	love.graphics.print(motd, 0, 0)
 end
 

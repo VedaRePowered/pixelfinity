@@ -1,5 +1,5 @@
-zoom = {}
-zoomLevel = 8
+local zoom = {}
+local zoomLevel = 6
 
 if zoomLevel == 0 then
 	misc.error("zoom: zoomLevel cannot be 0")

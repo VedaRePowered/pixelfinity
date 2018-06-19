@@ -7,11 +7,12 @@ function load.init()
 	id.new( "bar-load-1", ui.progress.newBar(width/4, 300, width/2, 50, {0.95, 0.07, 0.17}) )
 	id.new( "bar-load-2", ui.progress.newBar(width/4, 400, width/2, 50, {0.19, 0.31, 1}) )
 	id.new( "tex-main", ui.button.newButtonTexture("minicraftButton", asset.newFont("big", "menlo.ttf", 32)) )
+	asset.newFont("regular", "menlo.ttf", 18)
 end
 
 function load.update()
 	if progress1 == "initalyze" then
-		player.new("BEN1JEN", 0, 212, {})
+		player.new("BEN1JEN", 0, 220, inventory.fill(10, 5))
 		ui.progress.setProgress(id.get("bar-load-1"), 0)
 		progress1 = "loadAssets"
 	elseif progress1 == "loadAssets" then
@@ -21,7 +22,7 @@ function load.update()
 		load.blocks()
 		ui.progress.setProgress(id.get("bar-load-1"), 0.5)
 	elseif progress1 == "declareItems" then
-		progress1 = "done"
+		load.items()
 		ui.progress.setProgress(id.get("bar-load-1"), 0.75)
 	elseif progress1 == "done" then
 		load.complete()
@@ -31,14 +32,22 @@ end
 
 function load.assets()
 	local a = block.getDeclaringBlocks()[progress2]
+	local b = item.getDeclaringItems()[progress2-#block.getDeclaringBlocks()]
+	local c = asset.getDeclaringAssets()[progress2-#block.getDeclaringBlocks()-#item.getDeclaringItems()]
 	if a then
 		asset.load(a[1], "blocks/" .. a[1])
+		progress2 = progress2 + 1
+	elseif b then
+		asset.load(b[1], b[2])
+		progress2 = progress2 + 1
+	elseif c then
+		asset.load(c, c)
 		progress2 = progress2 + 1
 	else
 		progress1 = "declareBlocks"
 		progress2 = 1
 	end
-	ui.progress.setProgress(id.get("bar-load-2"), (progress2-1)/#block.getDeclaringBlocks())
+	ui.progress.setProgress( id.get("bar-load-2"), (progress2-1)/(#block.getDeclaringBlocks()+#item.getDeclaringItems()+#asset.getDeclaringAssets()) )
 end
 
 function load.blocks()
@@ -48,8 +57,20 @@ function load.blocks()
 		progress2 = progress2 + 1
 	else
 		progress1 = "declareItems"
+		progress2 = 1
 	end
 	ui.progress.setProgress(id.get("bar-load-2"), (progress2-1)/#block.getDeclaringBlocks())
+end
+
+function load.items()
+	local a = item.getDeclaringItems()[progress2]
+	if a then
+		item.declareItem(a[1], asset.get(a[1]), a[3], a[4])
+		progress2 = progress2 + 1
+	else
+		progress1 = "done"
+	end
+	ui.progress.setProgress(id.get("bar-load-2"), (progress2-1)/#item.getDeclaringItems())
 end
 
 function load.complete()

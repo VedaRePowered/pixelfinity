@@ -20,4 +20,10 @@ function asset.getFont(name)
 	return fonts[name]
 end
 
+function asset.getDeclaringAssets()
+	return {
+		"inventorySlot"
+	}
+end
+
 return asset

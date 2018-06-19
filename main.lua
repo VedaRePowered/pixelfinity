@@ -17,8 +17,11 @@ function love.load()
 	update    = require "func.update"
 	worldFunc = require "func.world"
 	collision = require "func.collision"
+	gui       = require "func.gui"
 	button    = require "func.button"
 	player    = require "func.player"
+	item      = require "func.item"
+	inventory = require "func.inventory"
 	lui       = require "lui.index"
 
 	ui = lui()
