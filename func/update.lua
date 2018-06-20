@@ -1,4 +1,5 @@
 local update = {}
+local inventoryDownLast = false
 
 function update.update(delta)
 	if status.check("menu") then
@@ -15,7 +16,12 @@ function update.game(delta)
 	local playerX, playerY = player.getPosition("BEN1JEN")
 	local offsetX, offsetY = zoom.offset()
 	camera.jump(playerX - offsetX, playerY - offsetY)
-	inventory.update(player.getInventory("BEN1JEN"))
+	if bool.get("inventory-open") then
+		inventory.update(player.getInventory("BEN1JEN"))
+	end
+	if button.inventory() then
+		bool.toggle("inventory-open")
+	end
 end
 
 function update.menu()

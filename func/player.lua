@@ -29,7 +29,14 @@ function player.move(name, delta)
 		p.vy = misc.clamp(p.vy, -10, 10)
 		p.vx = misc.clamp(p.vx, -10, 10)
 
-		p.x, p.y, p.onGround = collision.limit(0.75, 1, p.x, p.y, p.vx * delta, p.vy * delta)
+		local haltX, haltY
+		p.x, p.y, p.onGround, haltX, haltY = collision.limit(0.75, 1, p.x, p.y, p.vx * delta, p.vy * delta)
+		if haltX then
+			p.vx = 0
+		end
+		if haltY then
+			p.vy = 0
+		end
 	else
 		misc.warn("player: not a valid player: " .. name)
 	end

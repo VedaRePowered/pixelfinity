@@ -1,5 +1,10 @@
 local load = {}
 local progress1, progress2 = "initalyze", 1
+local boolsToDeclare = {
+	"inventory-open",
+	"up-down-last",
+	"inventory-down-last"
+}
 
 function load.init()
 	asset.load("logo", "logo")
@@ -17,13 +22,16 @@ function load.update()
 		progress1 = "loadAssets"
 	elseif progress1 == "loadAssets" then
 		load.assets()
-		ui.progress.setProgress(id.get("bar-load-1"), 0.25)
+		ui.progress.setProgress(id.get("bar-load-1"), 0.2)
 	elseif progress1 == "declareBlocks" then
 		load.blocks()
-		ui.progress.setProgress(id.get("bar-load-1"), 0.5)
+		ui.progress.setProgress(id.get("bar-load-1"), 0.4)
 	elseif progress1 == "declareItems" then
 		load.items()
-		ui.progress.setProgress(id.get("bar-load-1"), 0.75)
+		ui.progress.setProgress(id.get("bar-load-1"), 0.6)
+	elseif progress1 == "declareBools" then
+		load.bools()
+		ui.progress.setProgress(id.get("bar-load-1"), 0.8)
 	elseif progress1 == "done" then
 		load.complete()
 	end
@@ -62,13 +70,25 @@ function load.blocks()
 	ui.progress.setProgress(id.get("bar-load-2"), (progress2-1)/#block.getDeclaringBlocks())
 end
 
+function load.bools()
+	local a = boolsToDeclare[progress2]
+	if a then
+		bool.new(a, false)
+		progress2 = progress2 + 1
+	else
+		progress1 = "done"
+	end
+	ui.progress.setProgress(id.get("bar-load-2"), (progress2-1)/#boolsToDeclare)
+end
+
 function load.items()
 	local a = item.getDeclaringItems()[progress2]
 	if a then
 		item.declareItem(a[1], asset.get(a[1]), a[3], a[4])
 		progress2 = progress2 + 1
 	else
-		progress1 = "done"
+		progress1 = "declareBools"
+		progress2 = 1
 	end
 	ui.progress.setProgress(id.get("bar-load-2"), (progress2-1)/#item.getDeclaringItems())
 end

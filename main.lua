@@ -11,6 +11,7 @@ function love.load()
 	asset     = require "func.asset"
 	status    = require "func.status"
 	id        = require "func.id"
+	bool      = require "func.bool"
 	zoom      = require "func.zoom"
 	camera    = require "func.camera"
 	draw      = require "func.draw"

@@ -6,12 +6,18 @@ function draw.draw()
 	elseif status.check("menu") then
 		draw.menu()
 	elseif status.check("game") then
-		draw.world()
-		draw.player()
+		draw.game()
+	end
+	ui.draw()
+end
+
+function draw.game()
+	draw.world()
+	draw.player()
+	if bool.get("inventory-open") then
 		inventory.draw(player.getInventory("BEN1JEN"))
 		inventory.drawItemGrabed()
 	end
-	ui.draw()
 end
 
 function draw.load()
