@@ -80,38 +80,65 @@ function inventory.update(inv) -- update a specific inventory
 		inv.sx, inv.sy = 0, 0
 	end
 
-	-- if they have let go, and are inside of the inventory, then do somthing with the items
+	-- if they have let go, and are inside of the inventory then do somthing with the items
 	if not love.mouse.isDown(1, 2) and inv.sx ~= 0 then
-		-- if the 1st button was pressed, and the items are diferent, then swap the items
-		if mouseDownLast == 1 and itemGrabed.name ~= inv[inv.sy][inv.sx]["name"] then
-			local tmp = itemGrabed
-			itemGrabed = inv[inv.sy][inv.sx]
-			inv[inv.sy][inv.sx] = tmp
-			mouseDownLast = 0
-		end
-		-- if the 1st button was pressed, and the items the same, then add the items together
-		if mouseDownLast == 1 and itemGrabed.name == inv[inv.sy][inv.sx]["name"] then
-			inv[inv.sy][inv.sx].amount = inv[inv.sy][inv.sx].amount + itemGrabed.amount
-			itemGrabed = {name = "", amount = 0}
-			mouseDownLast = 0
-		end
-		-- if the 2nd button was pressed, and thare is no item in the grabbed slot, split the selected slot
-		if mouseDownLast == 2 and itemGrabed.amount == 0 then
-			itemGrabed.name = inv[inv.sy][inv.sx]["name"]
-			itemGrabed.amount = inv[inv.sy][inv.sx]["amount"]
-			inv[inv.sy][inv.sx]["amount"] = math.floor(inv[inv.sy][inv.sx]["amount"] / 2)
-			itemGrabed.amount = math.ceil(itemGrabed.amount / 2)
-			mouseDownLast = 0
-		end
-		-- if the 2nd button was pressed, and thare is the same item in the grabbed slot and the selected, split the selected slot
-		if mouseDownLast == 2 and ( ( itemGrabed.name == inv[inv.sy][inv.sx]["name"] or inv[inv.sy][inv.sx]["amount"] == 0 ) and itemGrabed.amount > 0 ) then
-			itemGrabed.amount = itemGrabed.amount - 1
-			inv[inv.sy][inv.sx]["amount"] = inv[inv.sy][inv.sx]["amount"] + 1
-			inv[inv.sy][inv.sx]["name"] = itemGrabed.name
-			if itemGrabed.amount == 0 then
-				itemGrabed.name = ""
+		-- if they haven't dragedPastSlots do one of these 2 item opporations
+		if #dragedPastSlots <= 1 then
+			-- if the 1st button was pressed, and the items are diferent, then swap the items
+			if mouseDownLast == 1 and itemGrabed.name ~= inv[inv.sy][inv.sx]["name"] then
+				local tmp = itemGrabed
+				itemGrabed = inv[inv.sy][inv.sx]
+				inv[inv.sy][inv.sx] = tmp
+				mouseDownLast = 0
 			end
-			mouseDownLast = 0
+			-- if the 1st button was pressed, and the items the same, then add the items together
+			if mouseDownLast == 1 and itemGrabed.name == inv[inv.sy][inv.sx]["name"] then
+				inv[inv.sy][inv.sx].amount = inv[inv.sy][inv.sx].amount + itemGrabed.amount
+				itemGrabed = {name = "", amount = 0}
+				mouseDownLast = 0
+			end
+			-- if the 2nd button was pressed, and thare is no item in the grabbed slot, split the selected slot
+			if mouseDownLast == 2 and itemGrabed.amount == 0 then
+				itemGrabed.name = inv[inv.sy][inv.sx]["name"]
+				itemGrabed.amount = inv[inv.sy][inv.sx]["amount"]
+				inv[inv.sy][inv.sx]["amount"] = math.floor(inv[inv.sy][inv.sx]["amount"] / 2)
+				itemGrabed.amount = math.ceil(itemGrabed.amount / 2)
+				mouseDownLast = 0
+			end
+			-- if the 2nd button was pressed, and thare is the same item in the grabbed slot and the selected, split the selected slot
+			if mouseDownLast == 2 and ( ( itemGrabed.name == inv[inv.sy][inv.sx]["name"] or inv[inv.sy][inv.sx]["amount"] == 0 ) and itemGrabed.amount > 0 ) then
+				itemGrabed.amount = itemGrabed.amount - 1
+				inv[inv.sy][inv.sx]["amount"] = inv[inv.sy][inv.sx]["amount"] + 1
+				inv[inv.sy][inv.sx]["name"] = itemGrabed.name
+				if itemGrabed.amount == 0 then
+					itemGrabed.name = ""
+				end
+				mouseDownLast = 0
+			end
+		else -- otherwise do a multi-item opporation
+			if mouseDownLast == 1 then
+				local addToSlots = {}
+				for _, slot in ipairs(dragedPastSlots) do
+					if inv[slot.y][slot.x]["name"] == itemGrabed.name or inv[slot.y][slot.x]["amount"] == 0 then
+						table.insert(addToSlots, slot)
+					end
+				end
+				local amountToAdd = math.floor(itemGrabed.amount/#addToSlots)
+				print(amountToAdd)
+				for _, slot in ipairs(addToSlots) do
+					inv[slot.y][slot.x]["name"] = itemGrabed.name
+					inv[slot.y][slot.x]["amount"] = inv[slot.y][slot.x]["amount"] + amountToAdd
+				end
+				itemGrabed.amount = itemGrabed.amount % #addToSlots
+			end
+		end
+
+		dragedPastSlots = {}
+	end
+
+	if love.mouse.isDown(1, 2) and inv.sx ~= 0 then
+		if not inventory.containsInventorySlot(dragedPastSlots, inv.sx, inv.sy) then
+			table.insert(dragedPastSlots, {x=inv.sx, y=inv.sy})
 		end
 	end
 
@@ -128,6 +155,15 @@ function inventory.update(inv) -- update a specific inventory
 	end
 
 
+end
+
+function inventory.containsInventorySlot(table, x, y)
+	for _, item in pairs(table) do
+		if item.x == x and item.y == y then
+			return true
+		end
+	end
+	return false
 end
 
 return inventory
