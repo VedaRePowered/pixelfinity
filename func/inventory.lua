@@ -52,6 +52,22 @@ function inventory.draw(inv)
 	end
 end
 
+function inventory.drawHotbar(hotbar)
+	-- get the height of the screen, and the gui scale
+	local guiZoom = gui.getScale()*20
+	local width, height = love.window.getMode()
+
+	-- loop thrugh all slots in the hotbar
+	for xOffset, itemData in ipairs(hotbar) do
+		-- draw a slot in the inventory
+		love.graphics.draw(asset.get("hotbarSlot"), (width/2-guiZoom*5)+xOffset*guiZoom-2*gui.getScale(), height-(guiZoom+2*gui.getScale()), 0, gui.getScale(), gui.getScale())
+		if itemData.amount ~= 0 then
+			-- if there's an item here, draw it
+			item.drawItem(itemData.name, (width/2-guiZoom*5)+xOffset*guiZoom, guiZoom)
+		end
+	end
+end
+
 function inventory.fill(w, h) -- create a new empty inventory with a specific size
 	local ret = {}
 	ret.x, ret.y, ret.sx, ret.sy = 50, 50, 3, 1
@@ -200,6 +216,13 @@ function inventory.containsInventorySlot(table, x, y)
 		end
 	end
 	return false
+end
+
+function inventory.give(inv, item, amount)
+	if not amount then
+		amount = 1
+	end
+
 end
 
 return inventory

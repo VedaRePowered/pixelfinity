@@ -11,12 +11,12 @@ end
 function player.move(name, delta)
 	local p = players[name]
 	if p then
+		p.vy = p.vy - delta * 30
+
 		if button.up() and p.onGround then
 			p.vy = 10
 			p.onGround = false
 		end
-
-		p.vy = p.vy - delta * 30
 
 		if button.right() and not button.left() then
 			p.vx = p.vx + delta * 30

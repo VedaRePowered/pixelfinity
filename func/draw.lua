@@ -14,6 +14,7 @@ end
 function draw.game()
 	draw.world()
 	draw.player()
+	inventory.drawHotbar(player.getInventory("BEN1JEN")[1])
 	if bool.get("inventory-open") then
 		inventory.draw(player.getInventory("BEN1JEN"))
 		inventory.drawItemGrabed()

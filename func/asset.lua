@@ -22,7 +22,8 @@ end
 
 function asset.getDeclaringAssets()
 	return {
-		"inventorySlot"
+		"inventorySlot",
+		"hotbarSlot"
 	}
 end
 
