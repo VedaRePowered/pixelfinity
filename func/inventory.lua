@@ -7,9 +7,14 @@ function inventory.drawItemGrabed()
 	local mouseX, mouseY = love.mouse.getPosition()
 	local _, height = love.window.getMode()
 
-	mouseY = height - mouseY
+	mouseX = mouseX - gui.getScale()*8
+	mouseY = height - mouseY + gui.getScale()*8
 	if itemGrabed.amount ~= 0 then
 		item.drawItem(itemGrabed.name, mouseX, mouseY)
+		if itemGrabed.amount > 0 then
+			love.graphics.setFont(asset.getFont("regular"))
+			love.graphics.print(itemGrabed.amount, mouseX, height-mouseY)
+		end
 	end
 end
 
@@ -32,8 +37,14 @@ function inventory.draw(inv)
 				end
 			end
 			if inv.sx == xOffset and inv.sy == yOffset then
-				-- highlight the selected item
+				-- highlight the selected slot
 				love.graphics.setColor(1, 1, 1, 0.3)
+				love.graphics.rectangle("fill", inv.x+xOffset*guiZoom, height-(inv.y+yOffset*guiZoom), gui.getScale()*16, gui.getScale()*16)
+				love.graphics.setColor(1, 1, 1, 1)
+			end
+			if inventory.containsInventorySlot(dragedPastSlots, xOffset, yOffset) then
+				-- highlight the draged past slot
+				love.graphics.setColor(1, 1, 0.3, 0.4)
 				love.graphics.rectangle("fill", inv.x+xOffset*guiZoom, height-(inv.y+yOffset*guiZoom), gui.getScale()*16, gui.getScale()*16)
 				love.graphics.setColor(1, 1, 1, 1)
 			end
@@ -115,24 +126,36 @@ function inventory.update(inv) -- update a specific inventory
 				end
 				mouseDownLast = 0
 			end
-		else -- otherwise do a multi-item opporation
-			if mouseDownLast == 1 then
-				local addToSlots = {}
-				for _, slot in ipairs(dragedPastSlots) do
-					if inv[slot.y][slot.x]["name"] == itemGrabed.name or inv[slot.y][slot.x]["amount"] == 0 then
-						table.insert(addToSlots, slot)
-					end
+		elseif itemGrabed.amount > 0 then -- otherwise do a multi-item opporation if they have an item grabed
+			-- calculate slots to be added to
+			local addToSlots = {}
+			for _, slot in ipairs(dragedPastSlots) do
+				if inv[slot.y][slot.x]["name"] == itemGrabed.name or inv[slot.y][slot.x]["amount"] == 0 then
+					table.insert(addToSlots, slot)
 				end
+			end
+			-- if left click, do drag spliting
+			if mouseDownLast == 1 then
 				local amountToAdd = math.floor(itemGrabed.amount/#addToSlots)
-				print(amountToAdd)
 				for _, slot in ipairs(addToSlots) do
 					inv[slot.y][slot.x]["name"] = itemGrabed.name
 					inv[slot.y][slot.x]["amount"] = inv[slot.y][slot.x]["amount"] + amountToAdd
 				end
 				itemGrabed.amount = itemGrabed.amount % #addToSlots
 			end
+			-- if right click, do drag adding
+			if mouseDownLast == 2 then
+				for i, slot in ipairs(addToSlots) do
+					if i <= #itemGrabed.amount then
+						inv[slot.y][slot.x]["name"] = itemGrabed.name
+						inv[slot.y][slot.x]["amount"] = inv[slot.y][slot.x]["amount"] + 1
+					end
+				end
+				itemGrabed.amount = math.max(itemGrabed.amount - #addToSlots, 0)
+			end
 		end
 
+		-- reset the slots draged past if the mouse was released
 		dragedPastSlots = {}
 	end
 
@@ -154,6 +177,14 @@ function inventory.update(inv) -- update a specific inventory
 		mouseDownLast = 2
 	end
 
+	for i = 1, 10 do
+		if button["hotbar" .. i]() then
+			local tmp = inv[1][i]
+			inv[1][i] = inv[inv.sy][inv.sx]
+			inv[inv.sy][inv.sx] = tmp
+			mouseDownLast = 0
+		end
+	end
 
 end
 

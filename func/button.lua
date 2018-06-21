@@ -22,4 +22,74 @@ function button.inventory()
 	return ret
 end
 
+function button.hotbar1()
+	local invRaw = love.keyboard.isDown("1") or love.keyboard.isDown("kp1")
+	local ret = invRaw and bool.inv("hotbar-1-down-last")
+	bool.set("hotbar-1-down-last", invRaw)
+	return ret
+end
+
+function button.hotbar2()
+	local invRaw = love.keyboard.isDown("2") or love.keyboard.isDown("kp2")
+	local ret = invRaw and bool.inv("hotbar-2-down-last")
+	bool.set("hotbar-2-down-last", invRaw)
+	return ret
+end
+
+function button.hotbar3()
+	local invRaw = love.keyboard.isDown("3") or love.keyboard.isDown("kp3")
+	local ret = invRaw and bool.inv("hotbar-3-down-last")
+	bool.set("hotbar-3-down-last", invRaw)
+	return ret
+end
+
+function button.hotbar4()
+	local invRaw = love.keyboard.isDown("4") or love.keyboard.isDown("kp4")
+	local ret = invRaw and bool.inv("hotbar-4-down-last")
+	bool.set("hotbar-4-down-last", invRaw)
+	return ret
+end
+
+function button.hotbar5()
+	local invRaw = love.keyboard.isDown("5") or love.keyboard.isDown("kp5")
+	local ret = invRaw and bool.inv("hotbar-5-down-last")
+	bool.set("hotbar-5-down-last", invRaw)
+	return ret
+end
+
+function button.hotbar6()
+	local invRaw = love.keyboard.isDown("6") or love.keyboard.isDown("kp6")
+	local ret = invRaw and bool.inv("hotbar-6-down-last")
+	bool.set("hotbar-6-down-last", invRaw)
+	return ret
+end
+
+function button.hotbar7()
+	local invRaw = love.keyboard.isDown("7") or love.keyboard.isDown("kp7")
+	local ret = invRaw and bool.inv("hotbar-7-down-last")
+	bool.set("hotbar-7-down-last", invRaw)
+	return ret
+end
+
+function button.hotbar8()
+	local invRaw = love.keyboard.isDown("8") or love.keyboard.isDown("kp8")
+	local ret = invRaw and bool.inv("hotbar-8-down-last")
+	bool.set("hotbar-8-down-last", invRaw)
+	return ret
+end
+
+function button.hotbar9()
+	local invRaw = love.keyboard.isDown("9") or love.keyboard.isDown("kp9")
+	local ret = invRaw and bool.inv("hotbar-9-down-last")
+	bool.set("hotbar-9-down-last", invRaw)
+	return ret
+end
+
+function button.hotbar10()
+	local invRaw = love.keyboard.isDown("0") or love.keyboard.isDown("kp0")
+	local ret = invRaw and bool.inv("hotbar-0-down-last")
+	bool.set("hotbar-0-down-last", invRaw)
+	return ret
+end
+
 return button
