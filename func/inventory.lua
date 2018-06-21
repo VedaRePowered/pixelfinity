@@ -11,7 +11,7 @@ function inventory.drawItemGrabed()
 	mouseY = height - mouseY + gui.getScale()*8
 	if itemGrabed.amount ~= 0 then
 		item.drawItem(itemGrabed.name, mouseX, mouseY)
-		if itemGrabed.amount > 0 then
+		if itemGrabed.amount > 1 then
 			love.graphics.setFont(asset.getFont("regular"))
 			love.graphics.print(itemGrabed.amount, mouseX, height-mouseY)
 		end
@@ -31,7 +31,7 @@ function inventory.draw(inv)
 			if itemData.amount ~= 0 then
 				-- if there's an item here, draw it
 				item.drawItem(itemData.name, inv.x+xOffset*guiZoom, inv.y+yOffset*guiZoom)
-				if itemData.amount > 0 then
+				if itemData.amount > 1 then
 					love.graphics.setFont(asset.getFont("regular"))
 					love.graphics.print(itemData.amount, inv.x+xOffset*guiZoom, height-(inv.y+yOffset*guiZoom))
 				end
@@ -84,6 +84,11 @@ function inventory.update(inv) -- update a specific inventory
 	else
 		-- if the mouse is outside of the inventory on -x or -y, deselect all items
 		inv.sx, inv.sy = 0, 0
+	end
+
+	-- if the mouse is at -0 for some reason, deselect all items
+	if inv.sy == 0 then
+		inv.sx = 0
 	end
 
 	-- if the mouse is outside of the inventory on +x or +y, deselect all items
@@ -146,7 +151,7 @@ function inventory.update(inv) -- update a specific inventory
 			-- if right click, do drag adding
 			if mouseDownLast == 2 then
 				for i, slot in ipairs(addToSlots) do
-					if i <= #itemGrabed.amount then
+					if i <= itemGrabed.amount then
 						inv[slot.y][slot.x]["name"] = itemGrabed.name
 						inv[slot.y][slot.x]["amount"] = inv[slot.y][slot.x]["amount"] + 1
 					end
