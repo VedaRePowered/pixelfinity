@@ -19,6 +19,14 @@ function draw.game()
 		inventory.draw(player.getInventory("BEN1JEN"))
 		inventory.drawItemGrabed()
 	end
+	if bool.get("debug-open") then
+		local playerX, playerY, playerVX, playerVY = player.getPosition("BEN1JEN")
+		playerX, playerY = misc.prettyNumber(playerX), misc.prettyNumber(playerY)
+		playerVX, playerVY = misc.prettyNumber(playerVX), misc.prettyNumber(playerVY)
+		love.graphics.setFont(asset.getFont("regular"))
+		love.graphics.print("X: " .. playerX .. "\nY: " .. playerY .. "\nVX: " .. playerVX .. "\nVY: " .. playerVY)
+	end
+	worldInteraction.draw()
 end
 
 function draw.load()
@@ -42,7 +50,7 @@ function draw.world()
 	local camX, camY = camera.getPos()
 	for yOffset = 1, zoom.yBlocks()+2 do
 		for xOffset = -1, zoom.xBlocks()+1 do
-			block.drawBlock(worldFunc.get(math.floor(xOffset+camX), math.floor(yOffset+camY)), (xOffset - misc.fpart(camX))*zoom.blockSize(), (yOffset - misc.fpart(camY))*zoom.blockSize())
+			block.drawBlock(worldFunc.get(math.floor(xOffset+camX), math.floor(yOffset+camY)), (xOffset - misc.fpart(camX))*zoom.blockSize(), (yOffset - misc.fpart(camY))*zoom.blockSize() )
 		end
 	end
 end

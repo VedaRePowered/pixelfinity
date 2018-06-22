@@ -22,7 +22,9 @@ function love.load()
 	button    = require "func.button"
 	player    = require "func.player"
 	item      = require "func.item"
+	timer     = require "func.timer"
 	inventory = require "func.inventory"
+	worldInteraction= require "func.worldInteraction" 
 	lui       = require "lui.index"
 
 	ui = lui()

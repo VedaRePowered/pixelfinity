@@ -22,6 +22,10 @@ function update.game(delta)
 	if button.inventory() then
 		bool.toggle("inventory-open")
 	end
+	if button.debug() then
+		bool.toggle("debug-open")
+	end
+	worldInteraction.update()
 end
 
 function update.menu()

@@ -223,6 +223,15 @@ function inventory.give(inv, item, amount)
 		amount = 1
 	end
 
+	for y, row in ipairs(inv) do
+		for x, slot in ipairs(row) do
+			if slot.name == item or slot.amount == 0 then
+				slot.name = item
+				slot.amount = slot.amount + amount
+				return
+			end
+		end
+	end
 end
 
 return inventory

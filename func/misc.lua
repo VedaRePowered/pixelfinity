@@ -60,4 +60,8 @@ function misc.slowDown(n, s)
 	return n
 end
 
+function misc.prettyNumber(n)
+	return math.floor(n*10+0.5)/10
+end
+
 return misc

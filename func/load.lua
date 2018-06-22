@@ -2,6 +2,7 @@ local load = {}
 local progress1, progress2 = "initalyze", 1
 local boolsToDeclare = {
 	"inventory-open",
+	"debug-open",
 	"up-down-last",
 	"inventory-down-last",
 	"hotbar-0-down-last",
@@ -13,7 +14,8 @@ local boolsToDeclare = {
 	"hotbar-6-down-last",
 	"hotbar-7-down-last",
 	"hotbar-8-down-last",
-	"hotbar-9-down-last"
+	"hotbar-9-down-last",
+	"dubug-down-last"
 }
 
 function load.init()

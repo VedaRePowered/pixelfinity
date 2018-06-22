@@ -30,7 +30,7 @@ function player.move(name, delta)
 		p.vx = misc.clamp(p.vx, -10, 10)
 
 		local haltX, haltY
-		p.x, p.y, p.onGround, haltX, haltY = collision.limit(0.75, 1, p.x, p.y, p.vx * delta, p.vy * delta)
+		p.x, p.y, p.onGround, haltX, haltY = collision.limit(0.75, 0.999, p.x, p.y, p.vx * delta, p.vy * delta)
 		if haltX then
 			p.vx = 0
 		end
@@ -47,7 +47,7 @@ function player.getInventory(name)
 end
 
 function player.getPosition(name)
-	return players[name]["x"], players[name]["y"]
+	return players[name]["x"], players[name]["y"], players[name]["vx"], players[name]["vy"]
 end
 
 return player

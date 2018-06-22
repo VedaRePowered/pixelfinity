@@ -92,4 +92,15 @@ function button.hotbar10()
 	return ret
 end
 
+function button.debug()
+	local dbgRaw = love.keyboard.isDown("f3")
+	local ret = dbgRaw and bool.inv("dubug-down-last")
+	bool.set("debug-down-last", dbgRaw)
+	return ret
+end
+
+function button.breakBlock()
+	return love.mouse.isDown(1)
+end
+
 return button
