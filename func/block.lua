@@ -9,14 +9,14 @@ function block.getDeclaringBlocks()
 	return {
 		{ "air", "", false, {}, true },
 		{ "zerostone", "", false, {}, false },
-		{ "oaklog", "wood", 1.5, {{item="oaklogblock", chance=1, amount=1, withtool=true}, {item="oakplank", chance=1, amount=2}, {item="oakplank", chance=0.5, amount=2}}, false },
-		{ "oakleavs", "wood", 0.5, {{item="oakleavsblock", chance=1, amount=1, withtool=true}, {item="oaksaplingblock", chance=0.1, amount=1}}, false },
-		{ "oakwood", "wood", 1, {{item="oakplank", chance=1, amount=2}, {item="oakplank", chance=0.5, amount=2}}, false },
+		{ "oaklog", "wood", 1, {{item="oaklogblock", chance=1, amount=1, withtool=true}, {item="oakplank", chance=1, amount=2}, {item="oakplank", chance=0.5, amount=2}}, false },
+		{ "oakleavs", "wood", 0.2, {{item="oakleavsblock", chance=1, amount=1, withtool=true}, {item="oaksaplingblock", chance=0.1, amount=1}}, false },
+		{ "oakwood", "wood", 0.5, {{item="oakplank", chance=1, amount=2}, {item="oakplank", chance=0.5, amount=2}}, false },
 		{ "stone", "rock", 2.5, {{item="cobblestoneblock", chance=1, amount=1, withtool=true}}, false },
 		{ "cobblestone", "rock", 2, {{item="cobblestoneblock", chance=1, amount=1, withtool=true}}, false },
-		{ "dirt", "dirt", 1, {{item="dirtblock", chance=1, amount=1}}, false },
-		{ "grass", "dirt", 1.5, {{item="dirtblock", chance=1, amount=1}, {item="grass", chance=1, amount=1, withtool=true}}, false },
-		{ "clay", "dirt", 1, {{item="clay", chance=1, amount=2}, {item="clay", chance=0.5, amount=2}}, false }
+		{ "dirt", "dirt", 0.8, {{item="dirtblock", chance=1, amount=1}}, false },
+		{ "grass", "dirt", 1, {{item="dirtblock", chance=1, amount=1}, {item="grass", chance=1, amount=1, withtool=true}}, false },
+		{ "clay", "dirt", 0.8, {{item="clay", chance=1, amount=2}, {item="clay", chance=0.5, amount=2}}, false }
 	}
 end
 

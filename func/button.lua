@@ -93,9 +93,9 @@ function button.hotbar10()
 end
 
 function button.debug()
-	local dbgRaw = love.keyboard.isDown("f3")
-	local ret = dbgRaw and bool.inv("dubug-down-last")
-	bool.set("debug-down-last", dbgRaw)
+	local invRaw = love.keyboard.isDown("f3")
+	local ret = invRaw and bool.inv("debug-down-last")
+	bool.set("debug-down-last", invRaw)
 	return ret
 end
 

@@ -1,5 +1,5 @@
 local worldInteraction = {}
-local blockBeingBroken = {x = 0, y = 0}
+local blockBeingBroken = {x = 1, y = 1}
 
 -- convert mouse x, y to block x, y
 function worldInteraction.mouseToBlock()
@@ -14,7 +14,7 @@ function worldInteraction.mouseToBlock()
 end
 -- update block breaking
 function worldInteraction.update()
-	-- if the player is clocking on a block, then 
+	-- if the player is clocking on a block, then
 	if button.breakBlock() then
 		local blockX, blockY = worldInteraction.mouseToBlock()
 		local blockX, blockY = math.floor(blockX), math.floor(blockY)
@@ -23,7 +23,7 @@ function worldInteraction.update()
 		end
 		blockBeingBroken = {x=blockX, y=blockY}
 	else
-		
+
 		timer.new("breaking-timer")
 	end
 
@@ -44,7 +44,14 @@ function worldInteraction.draw()
 	local _, height = love.window.getMode()
 	local blockX, blockY = blockBeingBroken.x, blockBeingBroken.y
 	local camX, camY = camera.getPos()
-	love.graphics.print(misc.prettyNumber(timer.getTime("breaking-timer")), (blockX - camX)*zoom.blockSize(), height-((blockY - camY)*zoom.blockSize()))
+	local hardness = block.get(worldFunc.get(blockBeingBroken.x, blockBeingBroken.y)).hardness
+	local breakAmount = 0
+	if hardness then
+		breakAmount = math.floor(timer.getTime("breaking-timer")/hardness * 6)
+	end
+	if breakAmount > 0 then
+		love.graphics.draw(asset.get("break" .. breakAmount), (blockX - camX)*zoom.blockSize(), height-((blockY - camY)*zoom.blockSize()), 0, zoom.getLevel(), zoom.getLevel())
+	end
 end
 
 function worldInteraction.dropBlock(name, inv)
