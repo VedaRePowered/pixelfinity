@@ -103,4 +103,8 @@ function button.breakBlock()
 	return love.mouse.isDown(1)
 end
 
+function button.use()
+	return love.mouse.isDown(2)
+end
+
 return button

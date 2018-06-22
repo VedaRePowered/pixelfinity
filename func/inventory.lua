@@ -65,6 +65,12 @@ function inventory.drawHotbar(hotbar)
 			-- if there's an item here, draw it
 			item.drawItem(itemData.name, (width/2-guiZoom*5)+xOffset*guiZoom, guiZoom)
 		end
+		if worldInteraction.getHotbarSelect() == xOffset then
+			-- highlight the selected slot
+			love.graphics.setColor(1, 1, 1, 0.3)
+			love.graphics.rectangle("fill", (width/2-guiZoom*5)+xOffset*guiZoom-2*gui.getScale(), height-(guiZoom+2*gui.getScale()), gui.getScale()*20, gui.getScale()*20)
+			love.graphics.setColor(1, 1, 1, 1)
+		end
 	end
 end
 
@@ -74,13 +80,7 @@ function inventory.fill(w, h) -- create a new empty inventory with a specific si
 	for y = 1, h do
 		ret[y] = {}
 		for x = 1, w do
-			if x == 1 then
-				ret[y][x] = {name="grassblock", amount=5}
-			elseif x == 2 then
-				ret[y][x] = {name="clay", amount=5}
-			else
-				ret[y][x] = {name="", amount=0}
-			end
+			ret[y][x] = {name="", amount=0}
 		end
 	end
 	return ret
@@ -232,6 +232,22 @@ function inventory.give(inv, item, amount)
 			end
 		end
 	end
+end
+
+function inventory.get(inv, x, y)
+	return item.get(inv[y][x]["name"]), inv[y][x]["name"]
+end
+
+function inventory.take(inv, x, y)
+	local oldItem = inv[y][x]
+	local newItem = {}
+	newItem.amount = oldItem.amount - 1
+	newItem.name = oldItem.name
+	if newItem.amount < 1 then
+		newItem.amount = 0
+		newItem.name = ""
+	end
+	inv[y][x] = newItem
 end
 
 return inventory

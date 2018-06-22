@@ -2,14 +2,14 @@ local item = {}
 local items = {}
 
 function item.declareItem(name, texture, useFunc, useArg)
-	items[name] = {texture=texture, useFunc=useFunc, useArg}
+	items[name] = {texture=texture, useFunc=useFunc, useArg=useArg}
 end
 
 function item.getDeclaringItems()
 	local ret = {}
 
 	for i, decBlock in ipairs(block.getDeclaringBlocks()) do
-		table.insert(ret, {decBlock[1] .. "block", "blocks/" .. decBlock[1], placeItem, decBlock[1]})
+		table.insert(ret, {decBlock[1] .. "block", "blocks/" .. decBlock[1], worldInteraction.placeItem, decBlock[1]})
 	end
 
 	table.insert(ret, {"clay", "items/clay", false})

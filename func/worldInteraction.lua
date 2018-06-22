@@ -1,5 +1,6 @@
 local worldInteraction = {}
 local blockBeingBroken = {x = 1, y = 1}
+local hotbar = 1
 
 -- convert mouse x, y to block x, y
 function worldInteraction.mouseToBlock()
@@ -12,6 +13,7 @@ function worldInteraction.mouseToBlock()
 	local blockY = mouseY/zoom.blockSize() + camY + 1
 	return blockX, blockY
 end
+
 -- update block breaking
 function worldInteraction.update()
 	-- if the player is clocking on a block, then
@@ -27,6 +29,12 @@ function worldInteraction.update()
 		timer.new("breaking-timer")
 	end
 
+	for i = 1, 10 do
+		if button["hotbar" .. i]() then
+			hotbar = i
+		end
+	end
+
 	local hardness = block.get(worldFunc.get(blockBeingBroken.x, blockBeingBroken.y)).hardness
 
 	if hardness and hardness <= timer.getTime("breaking-timer") then
@@ -38,6 +46,14 @@ function worldInteraction.update()
 			worldFunc.set(blockX, blockY, "air")
 		end
 	end
+
+	if button.use() then
+		local selectedItem = inventory.get(player.getInventory("BEN1JEN"), hotbar, 1)
+		if selectedItem and selectedItem.useFunc then
+			selectedItem.useFunc(selectedItem.useArg, player.getInventory("BEN1JEN"), hotbar, 1)
+		end
+	end
+
 end
 
 function worldInteraction.draw()
@@ -62,6 +78,18 @@ function worldInteraction.dropBlock(name, inv)
 				inventory.give(inv, drop.item, drop.amount)
 			end
 		end
+	end
+end
+
+function worldInteraction.getHotbarSelect()
+	return hotbar
+end
+
+function worldInteraction.placeItem(name, inv, x, y)
+	local blockX, blockY = worldInteraction.mouseToBlock()
+	if worldFunc.get(blockX, blockY) == "air" then
+		worldFunc.set(blockX, blockY, name)
+		inventory.take(inv, x, y)
 	end
 end
 
