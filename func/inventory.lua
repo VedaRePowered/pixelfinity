@@ -97,7 +97,7 @@ function inventory.fill(w, h) -- create a new empty inventory with a specific si
 		for x = 1, w do
 			ret[y][x] = {name="", amount=0}
 			if x == 1 and y == 1 then
-				ret[y][x] = {name="stoneaxe", amount=1}
+				ret[y][x] = {name="ultraminer", amount=10}
 			end
 		end
 	end

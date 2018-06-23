@@ -1,6 +1,6 @@
 local collision = {}
 
-function finalCheck(w, h, x, y, xv, yv)
+function collision.finalCheck(w, h, x, y, xv, yv)
 
 	local haltX, haltY = false, false
 
@@ -21,7 +21,7 @@ function finalCheck(w, h, x, y, xv, yv)
 		onGround = true
 		haltY = true
 	elseif not ( block.get(worldFunc.get(x, y+yv+h)).intangable and block.get(worldFunc.get(x+w, y+yv+h)).intangable ) then
-		y = math.ceil(y + yv) - h
+		y = math.ceil(y + yv) - h - 0.001
 		haltY = true
 	else
 		y = y + yv
@@ -46,7 +46,7 @@ function collision.limit(w, h, x, y, xv, yv)
 
 		-- if curX or curY are past x+xv, y+yv, do final check
 		if math.abs(curX - x) > math.abs(xv) or math.abs(curY - y) > math.abs(yv) then
-			return finalCheck(w, h, x, y, xv, yv)
+			return collision.finalCheck(w, h, x, y, xv, yv)
 		end
 
 		-- if not, do middle check
