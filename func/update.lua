@@ -18,6 +18,8 @@ function update.game(delta)
 	camera.jump(playerX - offsetX, playerY - offsetY)
 	if bool.get("inventory-open") then
 		inventory.update(player.getInventory("BEN1JEN"))
+	else
+		worldInteraction.update()
 	end
 	if button.inventory() then
 		bool.toggle("inventory-open")
@@ -25,7 +27,6 @@ function update.game(delta)
 	if button.debug() then
 		bool.toggle("debug-open")
 	end
-	worldInteraction.update()
 end
 
 function update.menu()

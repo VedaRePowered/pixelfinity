@@ -63,7 +63,12 @@ function worldInteraction.draw()
 	local hardness = block.get(worldFunc.get(blockBeingBroken.x, blockBeingBroken.y)).hardness
 	local breakAmount = 0
 	if hardness then
-		breakAmount = math.floor(timer.getTime("breaking-timer")/hardness * 6)
+		breakAmount = math.floor(timer.getTime("breaking-timer")/hardness * 6 + 0.5)
+	end
+
+	if breakAmount < 0 or breakAmount > 6 then
+		misc.warn("worldInteraction: breakAmount is out of bounds (" .. breakAmount .. ")")
+		breakAmount = 6
 	end
 	if breakAmount > 0 then
 		love.graphics.draw(asset.get("break" .. breakAmount), (blockX - camX)*zoom.blockSize(), height-((blockY - camY)*zoom.blockSize()), 0, zoom.getLevel(), zoom.getLevel())

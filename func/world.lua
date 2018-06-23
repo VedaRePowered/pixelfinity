@@ -19,7 +19,7 @@ function worldFunc.set(x, y, block, waterLevel)
 	end
 end
 
-function worldFunc.get(x, y)
+function worldFunc.get(x, y, noTree)
 	x, y = math.floor(x), math.floor(y)
 
 	local ret
@@ -30,7 +30,7 @@ function worldFunc.get(x, y)
 		misc.warn("world: getting block at y = nil is impossible")
 	end
 	if not world[x] then
-		worldFunc.gen(x)
+		worldFunc.gen(x, noTree)
 	end
 
 	if world[x][y] then
@@ -42,22 +42,57 @@ function worldFunc.get(x, y)
 	return ret
 end
 
-function worldFunc.gen(x)
+function worldFunc.gen(x, noTree)
 	world[x] = {}
+	local sHeight = math.floor(love.math.noise(x/100, seed)*100)+200
+	local dHeight = math.floor(love.math.noise(x/10, seed)*2)+2
 	for y = 1, 1024 do
-		local sHeight = math.floor(love.math.noise(x/100, seed)*100)+200
-		local dHeight = math.floor(love.math.noise(x/10, seed)*2)+2
 		if y == 1 then
 			worldFunc.set(x, y, "zerostone")
 		elseif y < sHeight then
 			worldFunc.set(x, y, "stone")
-		elseif y < sHeight+4 then
+		elseif y < sHeight+dHeight then
 			worldFunc.set(x, y, "dirt")
-		elseif y == sHeight+4 then
+		elseif y == sHeight+dHeight then
 			worldFunc.set(x, y, "grass")
 		else
 			worldFunc.set(x, y, "air")
 		end
+	end
+	if math.random(1, 10) == 1 and not noTree then
+		worldFunc.tree("oak", x, sHeight+dHeight)
+	end
+end
+
+function worldFunc.tree(type, x, y)
+	if type == "oak" then
+		worldFunc.get(x-2, 1, true)
+		worldFunc.get(x-1, 1, true)
+		worldFunc.get(x+1, 1, true)
+		worldFunc.get(x+2, 1, true)
+		local yTree = math.random(5, 7)
+		for yOffset = 1, yTree do
+			worldFunc.set(x, y+yOffset, "oaklog")
+		end
+		worldFunc.set(x-2, y+yTree-2, "oakleavs")
+		worldFunc.set(x-1, y+yTree-2, "oakleavs")
+		worldFunc.set(x+1, y+yTree-2, "oakleavs")
+		worldFunc.set(x+2, y+yTree-2, "oakleavs")
+		worldFunc.set(x-2, y+yTree-1, "oakleavs")
+		worldFunc.set(x-1, y+yTree-1, "oakleavs")
+		worldFunc.set(x+1, y+yTree-1, "oakleavs")
+		worldFunc.set(x+2, y+yTree-1, "oakleavs")
+		worldFunc.set(x-2, y+yTree, "oakleavs")
+		worldFunc.set(x-1, y+yTree, "oakleavs")
+		worldFunc.set(x, y+yTree, "oakleavs")
+		worldFunc.set(x+1, y+yTree, "oakleavs")
+		worldFunc.set(x+2, y+yTree, "oakleavs")
+		worldFunc.set(x-1, y+yTree+1, "oakleavs")
+		worldFunc.set(x, y+yTree+1, "oakleavs")
+		worldFunc.set(x+1, y+yTree+1, "oakleavs")
+		worldFunc.set(x-1, y+yTree+2, "oakleavs")
+		worldFunc.set(x, y+yTree+2, "oakleavs")
+		worldFunc.set(x+1, y+yTree+2, "oakleavs")
 	end
 end
 

@@ -18,6 +18,8 @@ function draw.game()
 	if bool.get("inventory-open") then
 		inventory.draw(player.getInventory("BEN1JEN"))
 		inventory.drawItemGrabed()
+	else
+		worldInteraction.draw()
 	end
 	if bool.get("debug-open") then
 		local playerX, playerY, playerVX, playerVY = player.getPosition("BEN1JEN")
@@ -26,7 +28,6 @@ function draw.game()
 		love.graphics.setFont(asset.getFont("regular"))
 		love.graphics.print("X: " .. playerX .. "\nY: " .. playerY .. "\nVX: " .. playerVX .. "\nVY: " .. playerVY)
 	end
-	worldInteraction.draw()
 end
 
 function draw.load()
