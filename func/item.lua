@@ -14,7 +14,7 @@ function item.getDeclaringItems()
 
 	table.insert(ret, {"clay", "items/clay", "Clay", {}, 1, false})
 	table.insert(ret, {"oakplank", "items/oakplank", "Oak Plank", {}, 1, false})
-	table.insert(ret, {"ultraminer", "blocks/zerostone", "Ultra Miner", {"wood", "rock", "dirt", "leavs"}, 50, worldInteraction.placeItem, "oaksapling"})
+	table.insert(ret, {"ultraminer", "blocks/zerostone", "Ultra Miner", {"wood", "rock", "dirt", "leavs"}, 50, worldInteraction.placeItem, "dirt"})
 	table.insert(ret, {"stonepickaxe", "items/stonepickaxe", "Stone Pickaxe", {"rock"}, 2, false})
 	table.insert(ret, {"stoneaxe", "items/stoneaxe", "Stone Axe", {"wood"}, 5, false})
 	table.insert(ret, {"stoneshovel", "items/stoneshovel", "Stone Shovel", {"dirt"}, 3, false})

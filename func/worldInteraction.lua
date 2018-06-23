@@ -25,7 +25,7 @@ function worldInteraction.update()
 		end
 		blockBeingBroken = {x=blockX, y=blockY}
 	else
-
+		blockBeingBroken = {x = 1, y = 1}
 		timer.new("breaking-timer")
 	end
 
@@ -72,6 +72,18 @@ function worldInteraction.draw()
 	local camX, camY = camera.getPos()
 	local hardness = block.get(worldFunc.get(blockBeingBroken.x, blockBeingBroken.y)).hardness
 	local breakAmount = 0
+
+	local inv = player.getInventory("BEN1JEN")
+	local name = inventory.getName(inv, hotbar, 1)
+	local breakingBlock = worldFunc.get(blockBeingBroken.x, blockBeingBroken.y)
+	if name ~= "" then
+		isTool = item.isToolFor(name, block.get(breakingBlock).type)
+	end
+
+	if isTool then
+		hardness = hardness / item.get(name).mineMul
+	end
+
 	if hardness then
 		breakAmount = math.floor(timer.getTime("breaking-timer")/hardness * 6 + 0.5)
 	end

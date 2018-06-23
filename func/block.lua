@@ -11,7 +11,7 @@ function block.getDeclaringBlocks()
 		{ "zerostone", "", false, {}, false },
 		{ "oaklog", "wood", 1, {{item="oaklogblock", chance=1, amount=1, withtool=true}, {item="oakplank", chance=1, amount=2}, {item="oakplank", chance=0.5, amount=2}}, false },
 		{ "oakleavs", "wood", 0.2, {{item="oakleavsblock", chance=1, amount=1, withtool=true}, {item="oaksaplingblock", chance=0.1, amount=1}}, false },
-		{ "oaksapling", "wood", 0, {{item="oaksaplingblock", chance=1, amount=1}} },
+		{ "oaksapling", "wood", 0, {{item="oaksaplingblock", chance=1, amount=1}}, true },
 		{ "oakwood", "wood", 0.5, {{item="oakplank", chance=1, amount=2}, {item="oakplank", chance=0.5, amount=2}}, false },
 		{ "stone", "rock", 2.5, {{item="cobblestoneblock", chance=1, amount=1, withtool=true}}, false },
 		{ "cobblestone", "rock", 2, {{item="cobblestoneblock", chance=1, amount=1, withtool=true}}, false },
