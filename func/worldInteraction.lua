@@ -37,18 +37,28 @@ function worldInteraction.update()
 
 	local hardness = block.get(worldFunc.get(blockBeingBroken.x, blockBeingBroken.y)).hardness
 
+	local inv = player.getInventory("BEN1JEN")
+	local name = inventory.getName(inv, hotbar, 1)
+	local isTool = false
+	local breakingBlock = worldFunc.get(blockBeingBroken.x, blockBeingBroken.y)
+	if name ~= "" then
+		isTool = item.isToolFor(name, block.get(breakingBlock).type)
+	end
+
+	if isTool then
+		hardness = hardness / item.get(name).mineMul
+	end
+
 	if hardness and hardness <= timer.getTime("breaking-timer") then
 		timer.reset("breaking-timer")
-		local blockX, blockY = worldInteraction.mouseToBlock()
-		local blockX, blockY = math.floor(blockX), math.floor(blockY)
-		if blockY > 0 then
-			worldInteraction.dropBlock(worldFunc.get(blockX, blockY), player.getInventory("BEN1JEN"))
-			worldFunc.set(blockX, blockY, "air")
+		if blockBeingBroken.y > 0 then
+			worldInteraction.dropBlock(breakingBlock, inv, isTool)
+			worldFunc.set(blockBeingBroken.x, blockBeingBroken.y, "air")
 		end
 	end
 
 	if button.use() then
-		local selectedItem = inventory.get(player.getInventory("BEN1JEN"), hotbar, 1)
+		local selectedItem, i = inventory.get(player.getInventory("BEN1JEN"), hotbar, 1)
 		if selectedItem and selectedItem.useFunc then
 			selectedItem.useFunc(selectedItem.useArg, player.getInventory("BEN1JEN"), hotbar, 1)
 		end
@@ -75,11 +85,11 @@ function worldInteraction.draw()
 	end
 end
 
-function worldInteraction.dropBlock(name, inv)
+function worldInteraction.dropBlock(name, inv, tool)
 	local drops = block.get(name).drops
 	for _, drop in ipairs(drops) do
-		if not drop.withtool then
-			if math.random(1, 1/drop.chance) == 1 then
+		if not drop.withtool or tool then
+			if math.random(1, math.ceil(1/drop.chance)) == 1 then
 				inventory.give(inv, drop.item, drop.amount)
 			end
 		end

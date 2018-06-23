@@ -50,6 +50,21 @@ function inventory.draw(inv)
 			end
 		end
 	end
+
+	-- show the lable for the selected item
+	if inv.sx ~= 0 then
+		local mouseX, mouseY = love.mouse.getPosition()
+		local selectedItem = inventory.get(inv, inv.sx, inv.sy)
+		local font = asset.getFont("regular")
+		if selectedItem then
+			love.graphics.setColor(0, 0, 0, 0.8)
+			love.graphics.rectangle("fill", mouseX, mouseY-font:getHeight(), font:getWidth(selectedItem.displayName), font:getHeight())
+			love.graphics.setColor(1, 1, 1, 1)
+			love.graphics.setFont(font)
+			love.graphics.print(selectedItem.displayName, mouseX, mouseY-font:getHeight())
+		end
+	end
+
 end
 
 function inventory.drawHotbar(hotbar)
@@ -81,6 +96,9 @@ function inventory.fill(w, h) -- create a new empty inventory with a specific si
 		ret[y] = {}
 		for x = 1, w do
 			ret[y][x] = {name="", amount=0}
+			if x == 1 and y == 1 then
+				ret[y][x] = {name="stoneaxe", amount=1}
+			end
 		end
 	end
 	return ret
@@ -248,6 +266,10 @@ function inventory.take(inv, x, y)
 		newItem.name = ""
 	end
 	inv[y][x] = newItem
+end
+
+function inventory.getName(inv, x, y)
+	return inv[y][x]["name"]
 end
 
 return inventory

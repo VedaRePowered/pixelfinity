@@ -3,7 +3,12 @@ local images = {}
 local fonts = {}
 
 function asset.load(name, file)
-	images[name] = love.graphics.newImage("assets/" .. file .. ".png")
+	if love.filesystem.getInfo("assets/" .. file .. ".png") then
+		images[name] = love.graphics.newImage("assets/" .. file .. ".png")
+	else
+		misc.warn("asset: file assets/" .. file .. ".png does not exist, using default texture")
+		images[name] = love.graphics.newImage("assets/missing.png")
+	end
 	images[name]:setFilter("nearest")
 end
 

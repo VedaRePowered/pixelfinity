@@ -55,10 +55,10 @@ function load.assets()
 	local b = item.getDeclaringItems()[progress2-#block.getDeclaringBlocks()]
 	local c = asset.getDeclaringAssets()[progress2-#block.getDeclaringBlocks()-#item.getDeclaringItems()]
 	if a then
-		asset.load(a[1], "blocks/" .. a[1])
+		asset.load("block" .. a[1], "blocks/" .. a[1])
 		progress2 = progress2 + 1
 	elseif b then
-		asset.load(b[1], b[2])
+		asset.load("item" .. b[1], b[2])
 		progress2 = progress2 + 1
 	elseif c then
 		asset.load(c, c)
@@ -73,7 +73,7 @@ end
 function load.blocks()
 	local a = block.getDeclaringBlocks()[progress2]
 	if a then
-		block.declareBlock(a[1], asset.get(a[1]), a[2], a[3], a[4], a[5])
+		block.declareBlock(a[1], asset.get("block" .. a[1]), a[2], a[3], a[4], a[5])
 		progress2 = progress2 + 1
 	else
 		progress1 = "declareItems"
@@ -96,7 +96,7 @@ end
 function load.items()
 	local a = item.getDeclaringItems()[progress2]
 	if a then
-		item.declareItem(a[1], asset.get(a[1]), a[3], a[4])
+		item.declareItem(a[1], asset.get("item" .. a[1]), a[3], a[4], a[5], a[6], a[7])
 		progress2 = progress2 + 1
 	else
 		progress1 = "declareBools"
