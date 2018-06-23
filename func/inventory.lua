@@ -278,4 +278,8 @@ function inventory.getName(inv, x, y)
 	return inv[y][x]["name"]
 end
 
+function inventory.getSize(inv)
+	return #inv[1], #inv
+end
+
 return inventory
