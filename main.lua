@@ -24,6 +24,7 @@ function love.load()
 	item      = require "func.item"
 	timer     = require "func.timer"
 	inventory = require "func.inventory"
+	crafting  = require "func.crafting"
 	worldInteraction= require "func.worldInteraction" 
 	lui       = require "lui.index"
 

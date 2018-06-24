@@ -15,6 +15,9 @@ function item.getDeclaringItems()
 	table.insert(ret, {"clay", "items/clay", "Clay", {}, 1, false})
 	table.insert(ret, {"oakplank", "items/oakplank", "Oak Plank", {}, 1, false})
 	table.insert(ret, {"ultraminer", "blocks/zerostone", "Ultra Miner", {"wood", "rock", "dirt", "leavs"}, 50, worldInteraction.placeItem, "dirt"})
+	table.insert(ret, {"woodpickaxe", "items/woodpickaxe", "Wood Pickaxe", {"rock"}, 1, false})
+	table.insert(ret, {"woodaxe", "items/woodaxe", "Wood Axe", {"wood"}, 3, false})
+	table.insert(ret, {"woodshovel", "items/woodshovel", "Wood Shovel", {"dirt"}, 2, false})
 	table.insert(ret, {"stonepickaxe", "items/stonepickaxe", "Stone Pickaxe", {"rock"}, 2, false})
 	table.insert(ret, {"stoneaxe", "items/stoneaxe", "Stone Axe", {"wood"}, 5, false})
 	table.insert(ret, {"stoneshovel", "items/stoneshovel", "Stone Shovel", {"dirt"}, 3, false})
@@ -22,6 +25,8 @@ function item.getDeclaringItems()
 	table.insert(ret, {"ironaxe", "items/ironaxe", "Iron Axe", {"wood"}, 8, false})
 	table.insert(ret, {"ironshovel", "items/ironshovel", "Iron Shovel", {"dirt"}, 8, false})
 	table.insert(ret, {"grass", "items/grass", "Tall Grass", {}, 1, false})
+	table.insert(ret, {"stick", "items/stick", "Stick", {}, 1, false})
+	table.insert(ret, {"stone", "items/stone", "Stone", {}, 1, false})
 
 	return ret
 end

@@ -1,7 +1,5 @@
 local inventory = {}
 local itemGrabed = {name="", amount=0}
-local mouseDownLast = 0
-local dragedPastSlots = {}
 
 function inventory.drawItemGrabed()
 	local mouseX, mouseY = love.mouse.getPosition()
@@ -42,7 +40,7 @@ function inventory.draw(inv)
 				love.graphics.rectangle("fill", inv.x+xOffset*guiZoom, height-(inv.y+yOffset*guiZoom), gui.getScale()*16, gui.getScale()*16)
 				love.graphics.setColor(1, 1, 1, 1)
 			end
-			if inventory.containsInventorySlot(dragedPastSlots, xOffset, yOffset) then
+			if inventory.containsInventorySlot(inv.dragedPastSlots, xOffset, yOffset) then
 				-- highlight the draged past slot
 				love.graphics.setColor(1, 1, 0.3, 0.4)
 				love.graphics.rectangle("fill", inv.x+xOffset*guiZoom, height-(inv.y+yOffset*guiZoom), gui.getScale()*16, gui.getScale()*16)
@@ -52,7 +50,7 @@ function inventory.draw(inv)
 	end
 
 	-- show the lable for the selected item
-	if inv.sx ~= 0 then
+	if inv.sx ~= 0 and inv.sy ~= 0 then
 		local mouseX, mouseY = love.mouse.getPosition()
 		local selectedItem = inventory.get(inv, inv.sx, inv.sy)
 		local font = asset.getFont("regular")
@@ -89,28 +87,28 @@ function inventory.drawHotbar(hotbar)
 	end
 end
 
-function inventory.fill(w, h) -- create a new empty inventory with a specific size
+function inventory.fill(w, h, output, x, y) -- create a new empty inventory with a specific size
 	local ret = {}
-	ret.x, ret.y, ret.sx, ret.sy = 50, 50, 3, 1
+	ret.output = output
+	ret.x, ret.y, ret.sx, ret.sy, ret.dragedPastSlots = 50, 50, 0, 1, {}
+	ret.mouseDownLast = 0
+	if x then
+		ret.x = x
+	end
+	if y then
+		ret.y = y
+	end
 	for y = 1, h do
 		ret[y] = {}
 		for x = 1, w do
 			ret[y][x] = {name="", amount=0}
-			if x == 1 and y == 1 then
-				ret[y][x] = {name="ironpickaxe", amount=1}
-			end
-			if x == 2 and y == 1 then
-				ret[y][x] = {name="ironaxe", amount=1}
-			end
-			if x == 3 and y == 1 then
-				ret[y][x] = {name="ironshovel", amount=1}
-			end
 		end
 	end
 	return ret
 end
 
 function inventory.update(inv) -- update a specific inventory
+
 	-- set important variables for the function
 	local _, height = love.window.getMode()
 	local mouseX, mouseY = love.mouse.getPosition()
@@ -136,51 +134,54 @@ function inventory.update(inv) -- update a specific inventory
 		inv.sx, inv.sy = 0, 0
 	end
 
-	-- if they have let go, and are inside of the inventory then do somthing with the items
-	if not love.mouse.isDown(1, 2) and inv.sx ~= 0 then
+	-- if they have let go, the inventory is not an output inventory, and are inside of the inventory then do somthing with the items
+	if not love.mouse.isDown(1, 2) and inv.sx ~= 0 and not inv.output then
+		if inv.mouseDownLast > 0 then
+			inv.changed = true
+		end
 		-- if they haven't dragedPastSlots do one of these 2 item opporations
-		if #dragedPastSlots <= 1 then
+		if #inv.dragedPastSlots <= 1 then
 			-- if the 1st button was pressed, and the items are diferent, then swap the items
-			if mouseDownLast == 1 and itemGrabed.name ~= inv[inv.sy][inv.sx]["name"] then
+			if inv.mouseDownLast == 1 and itemGrabed.name ~= inv[inv.sy][inv.sx]["name"] then
 				local tmp = itemGrabed
 				itemGrabed = inv[inv.sy][inv.sx]
 				inv[inv.sy][inv.sx] = tmp
-				mouseDownLast = 0
+				inv.mouseDownLast = 0
 			end
 			-- if the 1st button was pressed, and the items the same, then add the items together
-			if mouseDownLast == 1 and itemGrabed.name == inv[inv.sy][inv.sx]["name"] then
+			if inv.mouseDownLast == 1 and itemGrabed.name == inv[inv.sy][inv.sx]["name"] then
 				inv[inv.sy][inv.sx].amount = inv[inv.sy][inv.sx].amount + itemGrabed.amount
 				itemGrabed = {name = "", amount = 0}
-				mouseDownLast = 0
+				inv.mouseDownLast = 0
 			end
 			-- if the 2nd button was pressed, and thare is no item in the grabbed slot, split the selected slot
-			if mouseDownLast == 2 and itemGrabed.amount == 0 then
+			if inv.mouseDownLast == 2 and itemGrabed.amount == 0 then
 				itemGrabed.name = inv[inv.sy][inv.sx]["name"]
 				itemGrabed.amount = inv[inv.sy][inv.sx]["amount"]
 				inv[inv.sy][inv.sx]["amount"] = math.floor(inv[inv.sy][inv.sx]["amount"] / 2)
 				itemGrabed.amount = math.ceil(itemGrabed.amount / 2)
-				mouseDownLast = 0
+				inv.mouseDownLast = 0
 			end
 			-- if the 2nd button was pressed, and thare is the same item in the grabbed slot and the selected, split the selected slot
-			if mouseDownLast == 2 and ( ( itemGrabed.name == inv[inv.sy][inv.sx]["name"] or inv[inv.sy][inv.sx]["amount"] == 0 ) and itemGrabed.amount > 0 ) then
+			if inv.mouseDownLast == 2 and ( ( itemGrabed.name == inv[inv.sy][inv.sx]["name"] or inv[inv.sy][inv.sx]["amount"] == 0 ) and itemGrabed.amount > 0 ) then
 				itemGrabed.amount = itemGrabed.amount - 1
 				inv[inv.sy][inv.sx]["amount"] = inv[inv.sy][inv.sx]["amount"] + 1
 				inv[inv.sy][inv.sx]["name"] = itemGrabed.name
 				if itemGrabed.amount == 0 then
 					itemGrabed.name = ""
 				end
-				mouseDownLast = 0
+				inv.mouseDownLast = 0
 			end
 		elseif itemGrabed.amount > 0 then -- otherwise do a multi-item opporation if they have an item grabed
 			-- calculate slots to be added to
 			local addToSlots = {}
-			for _, slot in ipairs(dragedPastSlots) do
+			for _, slot in ipairs(inv.dragedPastSlots) do
 				if inv[slot.y][slot.x]["name"] == itemGrabed.name or inv[slot.y][slot.x]["amount"] == 0 then
 					table.insert(addToSlots, slot)
 				end
 			end
 			-- if left click, do drag spliting
-			if mouseDownLast == 1 then
+			if inv.mouseDownLast == 1 then
 				local amountToAdd = math.floor(itemGrabed.amount/#addToSlots)
 				for _, slot in ipairs(addToSlots) do
 					inv[slot.y][slot.x]["name"] = itemGrabed.name
@@ -189,7 +190,7 @@ function inventory.update(inv) -- update a specific inventory
 				itemGrabed.amount = itemGrabed.amount % #addToSlots
 			end
 			-- if right click, do drag adding
-			if mouseDownLast == 2 then
+			if inv.mouseDownLast == 2 then
 				for i, slot in ipairs(addToSlots) do
 					if i <= itemGrabed.amount then
 						inv[slot.y][slot.x]["name"] = itemGrabed.name
@@ -201,25 +202,37 @@ function inventory.update(inv) -- update a specific inventory
 		end
 
 		-- reset the slots draged past if the mouse was released
-		dragedPastSlots = {}
-	end
-
-	if love.mouse.isDown(1, 2) and inv.sx ~= 0 then
-		if not inventory.containsInventorySlot(dragedPastSlots, inv.sx, inv.sy) then
-			table.insert(dragedPastSlots, {x=inv.sx, y=inv.sy})
+		inv.dragedPastSlots = {}
+	elseif not love.mouse.isDown(1, 2) and inv.sx ~= 0 and inv.output then -- if it is in output mode do somthing else
+		-- if the 1st button was pressed, and the items the same, then add the items together and set change
+		if inv.mouseDownLast == 1 and (itemGrabed.name == inv[inv.sy][inv.sx]["name"] or itemGrabed.amount == 0) then
+			itemGrabed.amount = inv[inv.sy][inv.sx].amount + itemGrabed.amount
+			itemGrabed.name = inv[inv.sy][inv.sx].name
+			local oldName = inv[inv.sy][inv.sx].name
+			local oldAmount = inv[inv.sy][inv.sx].amount
+			inv[inv.sy][inv.sx].name = ""
+			inv[inv.sy][inv.sx].amount = 0
+			inv.changed = {x=inv.sx, y=inv.sy, name=oldName, amount=oldAmount}
+			inv.mouseDownLast = 0
 		end
 	end
 
-	mouseDownLast = 0
+	if love.mouse.isDown(1, 2) and inv.sx ~= 0 then
+		if not inventory.containsInventorySlot(inv.dragedPastSlots, inv.sx, inv.sy) then
+			table.insert(inv.dragedPastSlots, {x=inv.sx, y=inv.sy})
+		end
+	end
+
+	inv.mouseDownLast = 0
 
 	-- mark if the 1st button is down
 	if love.mouse.isDown(1) then
-		mouseDownLast = 1
+		inv.mouseDownLast = 1
 	end
 
 	-- mark if the 2nd button is down
 	if love.mouse.isDown(2) then
-		mouseDownLast = 2
+		inv.mouseDownLast = 2
 	end
 
 	for i = 1, 10 do
@@ -227,10 +240,14 @@ function inventory.update(inv) -- update a specific inventory
 			local tmp = inv[1][i]
 			inv[1][i] = inv[inv.sy][inv.sx]
 			inv[inv.sy][inv.sx] = tmp
-			mouseDownLast = 0
+			inv.mouseDownLast = 0
 		end
 	end
 
+end
+
+function inventory.resetChange(inv)
+	inv.changed = false
 end
 
 function inventory.containsInventorySlot(table, x, y)
@@ -259,7 +276,23 @@ function inventory.give(inv, item, amount)
 end
 
 function inventory.get(inv, x, y)
-	return item.get(inv[y][x]["name"]), inv[y][x]["name"]
+	if inv then
+		if inv[y] then
+			if inv[y][x] then
+				return item.get(inv[y][x]["name"]), inv[y][x]["name"]
+			else
+				misc.warn("inventory: invaled x position to get " .. x)
+			end
+		else
+			misc.warn("inventory: invaled y position to get " .. x)
+		end
+	else
+		misc.warn("inventory: invaled inv to get from")
+	end
+end
+
+function inventory.getSlot(inv, x, y)
+	return inv[y][x]
 end
 
 function inventory.take(inv, x, y)

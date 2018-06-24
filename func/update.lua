@@ -18,6 +18,13 @@ function update.game(delta)
 	camera.jump(playerX - offsetX, playerY - offsetY)
 	if bool.get("inventory-open") then
 		inventory.update(player.getInventory("BEN1JEN"))
+		local craftingInvs = player.getCrafting("BEN1JEN")
+		inventory.update(craftingInvs["in"])
+		inventory.update(craftingInvs.out)
+		if craftingInvs["in"].changed == true then
+			craftingInvs.out = crafting.craft(craftingInvs["in"], 2, 2)
+			inventory.resetChange(craftingInvs["in"])
+		end
 	else
 		worldInteraction.update()
 	end

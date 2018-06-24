@@ -5,7 +5,7 @@ function player.new(name, x, y, inv)
 	if not inv then
 		inv = inventory.fill(10, 5)
 	end
-	players[name] = {x=x, y=y, inv=inv, vx=0, vy=0, onGround=false}
+	players[name] = {x=x, y=y, inv=inv, vx=0, vy=0, onGround=false, crafting={["in"]=inventory.fill(2, 2, false, 100, 500), out=inventory.fill(2, 2, true, 300, 500)}}
 end
 
 function player.move(name, delta)
@@ -44,6 +44,10 @@ end
 
 function player.getInventory(name)
 	return players[name]["inv"]
+end
+
+function player.getCrafting(name)
+	return players[name]["crafting"]
 end
 
 function player.getPosition(name)

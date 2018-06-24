@@ -64,4 +64,24 @@ function misc.prettyNumber(n)
 	return math.floor(n*10+0.5)/10
 end
 
+function misc.tablePrint(t, tabs)
+	if not tabs then
+		tabs = 0
+	end
+	for k, v in pairs(t) do
+		if tabs > 0 then
+			for i = 1, tabs do
+				io.write("	")
+			end
+		end
+		io.write(k, " (", type(v), "):")
+		if type(v) == "table" then
+			io.write("\n")
+			misc.tablePrint(v, tabs+1)
+		else
+			io.write("	", tostring(v), "\n")
+		end
+	end
+end
+
 return misc

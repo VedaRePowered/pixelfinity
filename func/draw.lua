@@ -17,6 +17,9 @@ function draw.game()
 	inventory.drawHotbar(player.getInventory("BEN1JEN")[1])
 	if bool.get("inventory-open") then
 		inventory.draw(player.getInventory("BEN1JEN"))
+		local craftingInvs = player.getCrafting("BEN1JEN")
+		inventory.draw(craftingInvs["in"])
+		inventory.draw(craftingInvs["out"])
 		inventory.drawItemGrabed()
 	else
 		worldInteraction.draw()
