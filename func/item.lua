@@ -27,6 +27,7 @@ function item.getDeclaringItems()
 	table.insert(ret, {"grass", "items/grass", "Tall Grass", {}, 1, false})
 	table.insert(ret, {"stick", "items/stick", "Stick", {}, 1, false})
 	table.insert(ret, {"stone", "items/stone", "Stone", {}, 1, false})
+	table.insert(ret, {"oakbark", "blocks/oaklog", "Oak Bark", {}, 1, false})
 
 	return ret
 end
