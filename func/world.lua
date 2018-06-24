@@ -19,7 +19,7 @@ function worldFunc.set(x, y, block, waterLevel)
 	end
 end
 
-function worldFunc.get(x, y, noTree)
+function worldFunc.get(x, y)
 	x, y = math.floor(x), math.floor(y)
 
 	local ret
@@ -30,7 +30,7 @@ function worldFunc.get(x, y, noTree)
 		misc.warn("world: getting block at y = nil is impossible")
 	end
 	if not world[x] then
-		worldFunc.gen(x, noTree)
+		worldFunc.gen(x)
 	end
 
 	if world[x][y] then
@@ -42,34 +42,42 @@ function worldFunc.get(x, y, noTree)
 	return ret
 end
 
-function worldFunc.gen(x, noTree)
+function worldFunc.gen(x)
 	world[x] = {}
-	local sHeight = math.floor(love.math.noise(x/100, seed)*100)+200
-	local dHeight = math.floor(love.math.noise(x/10, seed)*2)+2
+	local bio = biome.get("plains")
+	local heights = biome.getHeights(x, bio, seed)
+	local topLayer = heights[#heights] + 1
 	for y = 1, 1024 do
+		worldFunc.set(x, y, "air")
 		if y == 1 then
 			worldFunc.set(x, y, "zerostone")
-		elseif y < sHeight then
-			worldFunc.set(x, y, "stone")
-		elseif y < sHeight+dHeight then
-			worldFunc.set(x, y, "dirt")
-		elseif y == sHeight+dHeight then
-			worldFunc.set(x, y, "grass")
 		else
 			worldFunc.set(x, y, "air")
+			if y <= topLayer then
+				for i, height in ipairs(heights) do
+					if y <= height then
+						worldFunc.set(x, y, bio.blockNames[i])
+						break
+					end
+				end
+				if y == topLayer and bio.topLayer then
+					worldFunc.set(x, y, bio.topLayer)
+				end
+			end
 		end
 	end
-	if math.random(1, 10) == 1 and not noTree then
-		worldFunc.tree("oak", x, sHeight+dHeight)
+	if bio.structures.trees and math.random(1, bio.structures.trees.chance) == 1 then
+		worldFunc.set(x, topLayer, "dirt")
+		worldFunc.tree("oak", x, topLayer)
 	end
 end
 
 function worldFunc.tree(type, x, y)
 	if type == "oak" then
-		worldFunc.get(x-2, 1, true)
-		worldFunc.get(x-1, 1, true)
-		worldFunc.get(x+1, 1, true)
-		worldFunc.get(x+2, 1, true)
+		worldFunc.get(x-2, 1)
+		worldFunc.get(x-1, 1)
+		worldFunc.get(x+1, 1)
+		worldFunc.get(x+2, 1)
 		local yTree = math.random(5, 7)
 		for yOffset = 1, yTree do
 			worldFunc.set(x, y+yOffset, "oaklog")

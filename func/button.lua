@@ -99,6 +99,14 @@ function button.debug()
 	return ret
 end
 
+function button.fullscreen()
+	local invRaw = love.keyboard.isDown("f12")
+	local ret = invRaw and bool.inv("fullscreen-down-last")
+	bool.set("fullscreen-down-last", invRaw)
+	return ret
+end
+
+
 function button.breakBlock()
 	return love.mouse.isDown(1)
 end
@@ -108,3 +116,4 @@ function button.use()
 end
 
 return button
+

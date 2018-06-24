@@ -334,6 +334,7 @@ function inventory.searchTake(inv, name, amount)
 				else
 					amount = amount - slot.amount
 					slot.amount = 0
+					slot.name = ""
 				end
 			end
 		end

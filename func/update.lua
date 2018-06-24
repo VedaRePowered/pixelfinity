@@ -2,6 +2,9 @@ local update = {}
 local inventoryDownLast = false
 
 function update.update(delta)
+	if button.fullscreen() then
+		love.window.setFullscreen( not love.window.getFullscreen() )
+	end
 	if status.check("menu") then
 		update.menu()
 	elseif status.check("load") then

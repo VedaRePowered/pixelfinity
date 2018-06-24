@@ -15,7 +15,8 @@ local boolsToDeclare = {
 	"hotbar-7-down-last",
 	"hotbar-8-down-last",
 	"hotbar-9-down-last",
-	"dubug-down-last"
+	"dubug-down-last",
+	"fullscreen-down-last"
 }
 
 function load.init()

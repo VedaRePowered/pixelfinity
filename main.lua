@@ -16,6 +16,7 @@ function love.load()
 	camera    = require "func.camera"
 	draw      = require "func.draw"
 	update    = require "func.update"
+	biome     = require "func.biome"
 	worldFunc = require "func.world"
 	collision = require "func.collision"
 	gui       = require "func.gui"
