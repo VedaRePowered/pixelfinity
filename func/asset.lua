@@ -34,7 +34,8 @@ function asset.getDeclaringAssets()
 		"break3",
 		"break4",
 		"break5",
-		"break6"
+		"break6",
+		"player"
 	}
 end
 

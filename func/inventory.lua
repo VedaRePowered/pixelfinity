@@ -315,4 +315,30 @@ function inventory.getSize(inv)
 	return #inv[1], #inv
 end
 
+function inventory.searchTake(inv, name, amount)
+	if not amount then
+		amount = 1
+	end
+
+	for y, row in ipairs(inv) do
+		for x, slot in ipairs(row) do
+			if slot.name == name then
+				if amount == 0 then
+					return true
+				end
+				if slot.amount > amount then
+					slot.amount = slot.amount - amount
+					return true
+				else
+					amount = amount - slot.amount
+					slot.amount = 0
+				end
+			end
+		end
+	end
+
+	return false
+end
+
 return inventory
+

@@ -12,6 +12,10 @@ function draw.draw()
 end
 
 function draw.game()
+	local width, height = love.window.getMode()
+	love.graphics.setColor(0.2, 0.35, 1)
+	love.graphics.rectangle("fill", 0, 0, width, height)
+	love.graphics.setColor(1, 1, 1)
 	draw.world()
 	draw.player()
 	inventory.drawHotbar(player.getInventory("BEN1JEN")[1])
@@ -64,7 +68,8 @@ function draw.player()
 	local camX, camY = camera.getPos()
 	local _, height = love.window.getMode()
 	playerX, playerY = playerX - camX, playerY - camY
-	love.graphics.rectangle("fill", playerX*zoom.blockSize(), height-playerY*zoom.blockSize(), zoom.blockSize() * 0.75, zoom.blockSize())
+	--love.graphics.rectangle("fill", playerX*zoom.blockSize(), height-playerY*zoom.blockSize(), zoom.blockSize() * 0.75, zoom.blockSize())
+	love.graphics.draw(asset.get("player"), playerX*zoom.blockSize(), height-playerY*zoom.blockSize(), 0, zoom.getLevel(), zoom.getLevel())
 end
 
 return draw

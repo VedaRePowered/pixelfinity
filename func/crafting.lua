@@ -44,5 +44,15 @@ function crafting.getAmounts(inv)
 	return amounts
 end
 
+function crafting.removeSupplies(inv, name)
+	for _, recipe in ipairs(recipes) do
+		if recipe.out.name == name then
+			for _, takeItem in ipairs(recipe) do
+				inventory.searchTake(inv, takeItem.name, takeItem.amount)
+			end
+		end
+	end
+end
+
 return crafting
 

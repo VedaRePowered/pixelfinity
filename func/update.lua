@@ -21,9 +21,14 @@ function update.game(delta)
 		local craftingInvs = player.getCrafting("BEN1JEN")
 		inventory.update(craftingInvs["in"])
 		inventory.update(craftingInvs.out)
-		if craftingInvs["in"].changed == true then
+		if craftingInvs["in"].changed then
 			craftingInvs.out = crafting.craft(craftingInvs["in"], 2, 2)
 			inventory.resetChange(craftingInvs["in"])
+		end
+		if craftingInvs.out.changed then
+			crafting.removeSupplies(craftingInvs["in"], craftingInvs.out.changed.name)
+			craftingInvs.out = crafting.craft(craftingInvs["in"], 2, 2)
+			inventory.resetChange(craftingInvs.out)
 		end
 	else
 		worldInteraction.update()
