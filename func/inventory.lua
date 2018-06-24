@@ -237,9 +237,11 @@ function inventory.update(inv) -- update a specific inventory
 
 	for i = 1, 10 do
 		if button["hotbar" .. i]() then
-			local tmp = inv[1][i]
-			inv[1][i] = inv[inv.sy][inv.sx]
-			inv[inv.sy][inv.sx] = tmp
+			if inv[1] and inv[1][i] then
+				local tmp = inv[1][i]
+				inv[1][i] = inv[inv.sy][inv.sx]
+				inv[inv.sy][inv.sx] = tmp
+			end
 			inv.mouseDownLast = 0
 		end
 	end
